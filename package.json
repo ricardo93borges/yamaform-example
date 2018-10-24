@@ -1,0 +1,24 @@
+{
+  "name": "yamaform-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricardo93borges/yamaform-example.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ricardo93borges/yamaform-example/issues"
+  },
+  "homepage": "https://github.com/ricardo93borges/yamaform-example#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "yamaform": "^2.5.1"
+  }
+}

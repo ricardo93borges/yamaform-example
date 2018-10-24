@@ -1,0 +1,16 @@
+{
+    "person": {
+        "name": "varchar(45)",
+        "age": "integer",
+        "hasMany": "dog",
+        "hasOne":"address"
+    },
+    "dog": {
+        "name": "varchar(45)",
+        "age": "integer",
+        "hasMany": "person"
+    },
+    "address": {
+        "name": "varchar(45)"
+    }
+}
