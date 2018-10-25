@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/ricardo93borges/yamaform-example#readme",
   "dependencies": {
-    "express": "^4.16.4",
-    "yamaform": "^2.5.1"
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
   }
 }
