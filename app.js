@@ -25,6 +25,7 @@ render = (html) => {
   return '<html>'
         +'<head>'
         +'<title>Yamaform example</title>'
+        +'<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">'
         +'</head>'
         +'<body>'
         +'<div class="content">'
@@ -37,9 +38,9 @@ render = (html) => {
 
 app.get('/', async (req, res) => {
 
-  let addressTable = await yamaform.fetch('address', {})
-  let personTable = await yamaform.fetch('person', {})
-  let dogTable = await yamaform.fetch('dog', {})
+  let addressTable = await yamaform.fetch('address', {'update':true, 'delete':true, 'updateUrl':'/address/update', 'deleteUrl':'/address/delete' })
+  let personTable = await yamaform.fetch('person', {'update':true, 'delete':true, 'updateUrl':'/person/update', 'deleteUrl':'/person/delete' })
+  let dogTable = await yamaform.fetch('dog', {'update':true, 'delete':true, 'updateUrl':'/dog/update', 'deleteUrl':'/dog/delete' })
 
   res.set('Content-Type', 'text/html');
   res.send(new Buffer(
