@@ -36,11 +36,14 @@ render = (html) => {
         +'</html>' 
 }
 
+/**
+ * Display records
+ */
 app.get('/', async (req, res) => {
 
-  let addressTable = await yamaform.fetch('address', {'update':true, 'delete':true, 'updateUrl':'/address/update', 'deleteUrl':'/address/delete' })
-  let personTable = await yamaform.fetch('person', {'update':true, 'delete':true, 'updateUrl':'/person/update', 'deleteUrl':'/person/delete' })
-  let dogTable = await yamaform.fetch('dog', {'update':true, 'delete':true, 'updateUrl':'/dog/update', 'deleteUrl':'/dog/delete' })
+  let addressTable = await yamaform.fetch('address', {'viewUrl':'/address', 'deleteUrl':'/address/delete' })
+  let personTable = await yamaform.fetch('person', {'viewUrl':'/person', 'deleteUrl':'/person/delete' })
+  let dogTable = await yamaform.fetch('dog', {'viewUrl':'/dog', 'deleteUrl':'/dog/delete' })
 
   res.set('Content-Type', 'text/html');
   res.send(new Buffer(
@@ -52,6 +55,9 @@ app.get('/', async (req, res) => {
   ));
 });
 
+/**
+ * View to insert records
+ */
 app.get('/add', async (req, res) => {
 
   let addAddressForm = await yamaform.generateForm('address', {'method':'post', 'action':'/address'})
@@ -68,6 +74,9 @@ app.get('/add', async (req, res) => {
   ));
 });
 
+/**
+ * Insert address
+ */
 app.post('/address', async(req,res) => {
   let data = {
     'address':[{'name':req.body.name}]
@@ -76,6 +85,9 @@ app.post('/address', async(req,res) => {
   res.redirect('/add')
 })
 
+/**
+ * Insert person
+ */
 app.post('/person', async(req,res) => {
   let data = {
     'person':[{'name':req.body.name, 'age':req.body.age, 'address_id':req.body.address}]
@@ -84,12 +96,108 @@ app.post('/person', async(req,res) => {
   res.redirect('/add')
 })
 
+/**
+ * Insert dog
+ */
 app.post('/dog', async(req,res) => {
   let data = {
     'dog':[{'name':req.body.name, 'age':req.body.age}]
   }
   yamaform.insert(data)
   res.redirect('/add')
+})
+
+/**
+ * View address
+ */
+app.get('/address/:id', async(req,res) => {
+  let form = await yamaform.generateForm('address', {'method':'put', 'action':'/address/update', 'id':req.params.id})
+  res.set('Content-Type', 'text/html');
+  res.send(new Buffer(render(form)));  
+})
+
+/**
+ * View person
+ */
+app.get('/person/:id', async(req,res) => {
+  let form = await yamaform.generateForm('person', {'method':'put', 'action':'/person/update', 'id':req.params.id})
+  res.set('Content-Type', 'text/html');
+  res.send(new Buffer(render(form)));  
+})
+
+/**
+ * View dog
+ */
+app.get('/dog/:id', async(req,res) => {
+  let form = await yamaform.generateForm('dog', {'method':'put', 'action':'/dog/update', 'id':req.params.id})
+  res.set('Content-Type', 'text/html');
+  res.send(new Buffer(render(form)));  
+})
+
+/**
+ * Update address
+ */
+app.post('/address/update', async(req,res) => {
+  let data = {
+    'address':[{'id':req.body.id, 'name':req.body.name}]
+  }
+  yamaform.update(data)
+  res.redirect('/')
+})
+
+/**
+ * Update person
+ */
+app.post('/person/update', async(req,res) => {
+  let data = {
+    'person':[{'id':req.body.id, 'name':req.body.name, 'age':req.body.age, 'address_id':req.body.address}]
+  }
+  yamaform.update(data)
+  res.redirect('/')
+})
+
+/**
+ * Update dog
+ */
+app.post('/dog/update', async(req,res) => {
+  let data = {
+    'dog':[{'id':req.body.id, 'name':req.body.name, 'age':req.body.age}]
+  }
+  yamaform.update(data)
+  res.redirect('/')
+})
+
+/**
+ * Delete address
+ */
+app.get('/address/delete/:id', async(req,res) => {
+  let data = {
+    "address":[{"where":`id = ${req.params.id}`}]
+  }
+  yamaform.remove(data)
+  res.redirect('/')
+})
+
+/**
+ * Delete person
+ */
+app.get('/person/delete/:id', async(req,res) => {
+  let data = {
+    "person":[{"where":`id = ${req.params.id}`}]
+  }
+  yamaform.remove(data)
+  res.redirect('/')
+})
+
+/**
+ * Delete dog
+ */
+app.get('/dog/delete/:id', async(req,res) => {
+  let data = {
+    "dog":[{"where":`id = ${req.params.id}`}]
+  }
+  yamaform.remove(data)
+  res.redirect('/')
 })
 
 
