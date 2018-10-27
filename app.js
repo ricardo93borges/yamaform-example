@@ -16,6 +16,14 @@ let databaseConfig = {
 
 let yamaform = new Yamaform(databaseConfig, `${__dirname}/database.json`)
 
+let formClasses = {
+  'formClass':'', 
+  'labelClass':'', 
+  'inputClass':'form-control',
+  'inputWrapperClass':'form-group', 
+  'buttonClass':'btn btn-default pull-right'
+}
+
 generateTables = async () => {
   await yamaform.generateTables()
 }
@@ -28,8 +36,8 @@ render = (html) => {
         +'<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">'
         +'</head>'
         +'<body>'
-        +'<div class="content">'
-        +'<h1>Yamaform</h1>'
+        +'<div class="container">'
+        +'<h1 class="text-center">Yamaform</h1>'
         +html
         +'</div>'
         +'</body>'
@@ -41,16 +49,17 @@ render = (html) => {
  */
 app.get('/', async (req, res) => {
 
-  let addressTable = await yamaform.fetch('address', {'viewUrl':'/address', 'deleteUrl':'/address/delete' })
-  let personTable = await yamaform.fetch('person', {'viewUrl':'/person', 'deleteUrl':'/person/delete' })
-  let dogTable = await yamaform.fetch('dog', {'viewUrl':'/dog', 'deleteUrl':'/dog/delete' })
+  let addressTable = await yamaform.fetch('address', {'tableClass':'table', 'viewUrl':'/address', 'deleteUrl':'/address/delete' })
+  let personTable = await yamaform.fetch('person', {'tableClass':'table','viewUrl':'/person', 'deleteUrl':'/person/delete' })
+  let dogTable = await yamaform.fetch('dog', {'tableClass':'table','viewUrl':'/dog', 'deleteUrl':'/dog/delete' })
 
   res.set('Content-Type', 'text/html');
   res.send(new Buffer(
     render(
-      addressTable 
-      +personTable
-      +dogTable
+      `<div class="row"><div class="col-md-12">${addressTable}</div></div>`
+      +`<div class="row"><div class="col-md-12">${personTable}</div></div>`
+      +`<div class="row"><div class="col-md-12">${dogTable}</div></div>`
+      +`<div class="row"><div class="col-md-12"><a href="/add" class="btn btn-primary pull-right">Add</a></div></div>`
     )
   ));
 });
@@ -60,16 +69,16 @@ app.get('/', async (req, res) => {
  */
 app.get('/add', async (req, res) => {
 
-  let addAddressForm = await yamaform.generateForm('address', {'method':'post', 'action':'/address'})
-  let addPersonForm = await yamaform.generateForm('person', {'method':'post', 'action':'/person'})
-  let addDogForm = await yamaform.generateForm('dog', {'method':'post', 'action':'/dog'})
+  let addAddressForm = await yamaform.generateForm('address', {'method':'post', 'action':'/address', ...formClasses})
+  let addPersonForm = await yamaform.generateForm('person', {'method':'post', 'action':'/person', ...formClasses})
+  let addDogForm = await yamaform.generateForm('dog', {'method':'post', 'action':'/dog', ...formClasses})
 
   res.set('Content-Type', 'text/html');
   res.send(new Buffer(
     render(
-      addAddressForm 
-      +addDogForm
-      +addPersonForm
+      `<div class="row"><div class="col-md-12">${addAddressForm}</div></div>`
+      +`<div class="row"><div class="col-md-12">${addDogForm}</div></div>`
+      +`<div class="row"><div class="col-md-12">${addPersonForm}</div></div>`
     )
   ));
 });
@@ -111,27 +120,33 @@ app.post('/dog', async(req,res) => {
  * View address
  */
 app.get('/address/:id', async(req,res) => {
-  let form = await yamaform.generateForm('address', {'method':'put', 'action':'/address/update', 'id':req.params.id})
+  let form = await yamaform.generateForm('address', {'method':'put', 'action':'/address/update', 'id':req.params.id, ...formClasses})
   res.set('Content-Type', 'text/html');
-  res.send(new Buffer(render(form)));  
+  res.send(new Buffer(render(
+    `<div class="row"><div class="col-md-12">${form}</div></div>`
+  )));  
 })
 
 /**
  * View person
  */
 app.get('/person/:id', async(req,res) => {
-  let form = await yamaform.generateForm('person', {'method':'put', 'action':'/person/update', 'id':req.params.id})
+  let form = await yamaform.generateForm('person', {'method':'put', 'action':'/person/update', 'id':req.params.id, ...formClasses})
   res.set('Content-Type', 'text/html');
-  res.send(new Buffer(render(form)));  
+  res.send(new Buffer(render(
+    `<div class="row"><div class="col-md-12">${form}</div></div>`
+  )));  
 })
 
 /**
  * View dog
  */
 app.get('/dog/:id', async(req,res) => {
-  let form = await yamaform.generateForm('dog', {'method':'put', 'action':'/dog/update', 'id':req.params.id})
+  let form = await yamaform.generateForm('dog', {'method':'put', 'action':'/dog/update', 'id':req.params.id, ...formClasses})
   res.set('Content-Type', 'text/html');
-  res.send(new Buffer(render(form)));  
+  res.send(new Buffer(render(
+    `<div class="row"><div class="col-md-12">${form}</div></div>`
+  )));  
 })
 
 /**
