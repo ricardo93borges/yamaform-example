@@ -56,9 +56,9 @@ app.get('/', async (req, res) => {
   res.set('Content-Type', 'text/html');
   res.send(new Buffer(
     render(
-      `<div class="row"><div class="col-md-12">${addressTable}</div></div>`
-      +`<div class="row"><div class="col-md-12">${personTable}</div></div>`
-      +`<div class="row"><div class="col-md-12">${dogTable}</div></div>`
+      `<div class="row"><div class="col-md-12"><h3>Adresses</h3>${addressTable}</div></div>`
+      +`<div class="row"><div class="col-md-12"><h3>Persons</h3>${personTable}</div></div>`
+      +`<div class="row"><div class="col-md-12"><h3>Dogs</h3>${dogTable}</div></div>`
       +`<div class="row"><div class="col-md-12"><a href="/add" class="btn btn-primary pull-right">Add</a></div></div>`
     )
   ));
