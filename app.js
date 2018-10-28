@@ -10,7 +10,7 @@ var Yamaform = require('yamaform');
 let databaseConfig = {
   host     : 'localhost',
   user     : 'root',
-  password : 'senha',
+  password : 'toor',
   database : 'yamaform'
 }
 
@@ -164,8 +164,9 @@ app.post('/address/update', async(req,res) => {
  * Update person
  */
 app.post('/person/update', async(req,res) => {
+  let dogIds = req.body.dog ? req.body.dog : []
   let data = {
-    'person':[{'id':req.body.id, 'name':req.body.name, 'age':req.body.age, 'address_id':req.body.address}]
+    'person':[{'id':req.body.id, 'name':req.body.name, 'age':req.body.age, 'address_id':req.body.address, 'dog':dogIds}]
   }
   yamaform.update(data)
   res.redirect('/')
@@ -175,8 +176,9 @@ app.post('/person/update', async(req,res) => {
  * Update dog
  */
 app.post('/dog/update', async(req,res) => {
+  let personIds = req.body.person ? req.body.person : []
   let data = {
-    'dog':[{'id':req.body.id, 'name':req.body.name, 'age':req.body.age}]
+    'dog':[{'id':req.body.id, 'name':req.body.name, 'age':req.body.age, 'person':personIds}]
   }
   yamaform.update(data)
   res.redirect('/')
